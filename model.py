@@ -45,7 +45,7 @@ def service_group_breakdown(train_df):
 def OOSS_breakdown(train_df):
     labels = ['online security', 'online backup', 'device protection', 'tech support']
     sizes = [train_df.online_security, train_df.online_backup, train_df.device_protection, train_df.tech_support]
-    plt.pie(size, labels = labels)
+    plt.pie(sizes, labels = labels)
     plt.title("Percentages of Out of Sight Services")
     plt.show()
     
