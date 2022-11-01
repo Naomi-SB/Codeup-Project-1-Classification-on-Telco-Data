@@ -28,12 +28,13 @@ def get_telco_data():
     return df
 
 def prep_telco_data(df):
-
-
-    # code that fixes white space fro total charges column
-    df['total_charges']=df['total_charges'].str.strip()
-    df['total_charges']=df['total_charges'].replace(' ', '')
-    df['total_charges'] = pd.to_numeric(df['total_charges'], errors = 'coerce')
+    #drop columns
+    df = df.drop(['tenure', 'senior_citizen', 'gender', 'paperless_billing', 'customer_id', 'contract_type_id', 'payment_type_id', 'total_charges'], axis = 1)
+    
+    # code that fixes white space from total charges column
+    #df['total_charges']=df['total_charges'].str.strip()
+    #df['total_charges']=df['total_charges'].replace(' ', '')
+    #df['total_charges'] = pd.to_numeric(df['total_charges'], errors = 'coerce')
    
     #code that bins monthly charges
     bins = [0, 20, 35, 50, 75, 100, 120]
@@ -54,6 +55,7 @@ def prep_telco_data(df):
     df['streaming_movies'] = df.streaming_movies.map({'Yes':1, 'No':0, 'No internet service': 0})
     df['online_backup'] = df.online_backup.map({'Yes':1, 'No':0, 'No internet service': 0})
     
+    
     #code to create household columns
     df['single_house'] = (df.dependents == 'No') & (df.partner == 'No')
     df['dual_house'] = (df.dependents == 'No') & (df.partner == 'Yes')
@@ -61,7 +63,7 @@ def prep_telco_data(df):
     df['single_head_house'] = (df.dependents == 'Yes') & (df.partner == 'No')
     
     #code to create dummies
-    dummy_df = pd.get_dummies(df[['single_house', 'dual_house', 'family_house', 'single_head_house','gender', 'partner', 'dependents', 'phone_service', 'paperless_billing', 'churn']], dummy_na = False, drop_first = True)
+    dummy_df = pd.get_dummies(df[['partner', 'dependents', 'phone_service', 'churn']], dummy_na = False, drop_first = True)
     df = pd.concat([df, dummy_df], axis = 1)
     
     #code to create focus features
@@ -83,23 +85,16 @@ def split_telco_data(df):
     
     return train_df, validate_df, test_df
 
-# function to split data into X_train, y_train, X_validate, y_validate, X_test, and y_test
-def final_split(df, target):
-    X_train, X_validate, X_test = slpit_telco_data(df, target)
+
     
-    #remember that for this project the target is churn
-    y_train = train[target]
-    y_validate = validate[target]
-    y_test = test[target]
     
-    #code to remove 'target' as a column
-    train.drop(columns = target, inplace = True)
-    validate.drop(columns = target, inplace = True)
-    test.drop(columns = target, inplace = True)
     
-    return X_train, y_train, X_validate, y_validate, X_test, y_test
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
     
